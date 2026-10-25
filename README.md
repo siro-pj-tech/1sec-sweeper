@@ -10,7 +10,7 @@
 
 ## ▶ 今すぐ遊ぶ
 
-### [ゲームをプレイする]([https://siro-pj-tech.github.io/1sec-sweeper/])
+### [ゲームをプレイする](https://siro-pj-tech.github.io/1sec-sweeper/)
 
 <!-- 公開後、上のURLを実際のプレイURLへ差し替えてください。 -->
 
