@@ -1,0 +1,1 @@
+(()=>{const value=window.SWEEPER_FINALE_DEFAULTS;window.SweeperFinaleConfig={flow:Object.keys(value.stages),current:()=>value,get:()=>JSON.parse(JSON.stringify(value))};})();
