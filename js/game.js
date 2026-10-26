@@ -40,17 +40,18 @@ let attackPointer=null,attackKey=false,keys=new Set(),movePointers=new Map(),sha
 let defeatedBoss=null,stageGold=0,shopElapsed=2,shopFrom=0,shopReward=0;
 let finale=null,guardCount=1,baseExplosion=0,music=null,musicPlaying=false,wantedTrack=null,musicResume=false,musicMuted=false,chargeSound=null,cutin=null;
 const settings=$('#settings'),overlay=$('#overlay'),activeSounds=new Set(),audio=window.SWEEPER_AUDIO||{};
+const sePlayer=window.SweeperSE.create(audio,{keys:Object.keys(audio).filter(k=>!['title','phase1','phase2','phase3','phase4','shop','gameover','ending','message','countEnd'].includes(k)),getVolume:()=>+$('#seVolume').value,maxVoices:6,onStatus:s=>{const el=$('#seAudioStatus');if(el)el.textContent=s.backend==='webaudio'?'SE: Web Audio '+s.ready+'/'+s.total+(s.failed.length?'（読込失敗 '+s.failed.join(',')+'）':''):'SE: 互換再生（'+s.reason+'）。HTTPで開くと事前デコード再生を使用します。';}});
 function cameraX(){if(intro){const t=clamp((intro.elapsed-V.bossIntroHold)/V.bossIntroPan,0,1),q=t*t*(3-2*t);return intro.from+(intro.to-intro.from)*q;}return clamp(player-W/2,0,END-W);}
 function inputsHeld(){return attackKey||attackPointer!==null;}
 function attackLocked(){return !!intro||!!reaction||cooldown>0||needsRelease;}
 function resetInput(){stopChargeSound();charge=null;keys.clear();movePointers.clear();attackPointer=null;attackKey=false;needsRelease=false;}
 function resetTransient(){document.getElementById('fullFade')?.remove();sceneTransition=null;intro=null;resetInput();cutin=null;renderCutin();reaction=null;knockbackY=0;cooldown=0;contactGrace=0;stageClearPending=false;paused=false;finale=null;defeatedBoss=null;baseExplosion=0;$('#warningBanner').hidden=true;$('#sceneFade').hidden=true;$('#pauseVeil').hidden=true;$('#alertSweep').hidden=true;}
-function se(name){if(!audio[name]||activeSounds.size>=6)return null;const a=new Audio(audio[name]);activeSounds.add(a);a.volume=+$('#seVolume').value;a.onended=a.onerror=()=>activeSounds.delete(a);a.play().catch(()=>activeSounds.delete(a));return a;}
+function se(name){if(!audio[name]||activeSounds.size>=6)return null;const a=sePlayer.play(name);if(!a)return null;activeSounds.add(a);a.onended=a.onerror=()=>activeSounds.delete(a);return a;}
 function stopChargeSound(){if(chargeSound){chargeSound.pause();activeSounds.delete(chargeSound);chargeSound=null;}}
 function syncTitleMusic(){const button=$('#titleMusic');if(button)button.hidden=screen!=='title'||musicPlaying||musicMuted;}
 function tryMusicPlayback(current){return current.play().then(()=>{if(music===current){musicPlaying=true;$('#audioStatus').textContent='BGM再生中';syncTitleMusic();}else current.pause();}).catch(()=>{if(music!==current)return;musicPlaying=false;$('#audioStatus').textContent='画面を操作するとBGMを再生します。';syncTitleMusic();});}
 function playMusic(track){wantedTrack=track;if(music)music.pause();musicPlaying=false;music=null;if(!audio[track]){$('#audioStatus').textContent='この場面のBGMは未指定です。';return;}music=new Audio(audio[track]);music.loop=true;music.volume=+$('#bgmVolume').value;music.onerror=()=>$('#audioStatus').textContent='音源を読み込めませんでした。';if(musicMuted)return;tryMusicPlayback(music);}
-function unlockMusic(){if(music&&!musicMuted&&(!musicPlaying||music.paused)&&!paused&&!settings.open)tryMusicPlayback(music);}
+function unlockMusic(){sePlayer.unlock();if(music&&!musicMuted&&(!musicPlaying||music.paused)&&!paused&&!settings.open)tryMusicPlayback(music);}
 // Retry inside completed user gestures too: initial pointerdown may precede activation.
 for(const event of ['pointerdown','pointerup','click','keydown'])window.addEventListener(event,unlockMusic,{capture:true});
 function showCutin(kind){cutin={kind,elapsed:0};$('#cutin').src=kind==='just'?'assets/images/justslash.jpg':'assets/images/musou.jpg';renderCutin();}
