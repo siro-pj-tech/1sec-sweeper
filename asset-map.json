@@ -98,7 +98,6 @@
   "audio/se_labo/guard_block.mp3": "assets/se/guard-block.mp3",
   "audio/se_labo/guard_mode.mp3": "assets/se/guard-mode.mp3",
   "audio/se_labo/guard_perfect.mp3": "assets/se/guard-perfect.mp3",
-  "audio/se_labo/hold_start.mp3": "assets/se/hold-start.mp3",
   "audio/se_labo/judge_good.mp3": "assets/se/judge-good.mp3",
   "audio/se_labo/judge_great.mp3": "assets/se/judge-great.mp3",
   "audio/se_labo/judge_miss.mp3": "assets/se/judge-miss.mp3",
@@ -145,5 +144,6 @@
   "image/title.jpg": "assets/images/title.jpg",
   "image/title_logo.png": "assets/images/title-logo.png",
   "image/walk_L.png": "assets/images/walk-l.png",
-  "image/walk_R.png": "assets/images/walk-r.png"
+  "image/walk_R.png": "assets/images/walk-r.png",
+  "audio/se_labo/hold_start_s.mp3": "assets/se/hold-start-s.mp3"
 }
